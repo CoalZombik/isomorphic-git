@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import '../../typedefs-http.js'
 import { collect } from '../../utils/collect.js'
-import { fromStream } from '../../utils/fromStream'
+import { fromStream } from '../../utils/fromStream.js'
 
 /**
  * HttpClient

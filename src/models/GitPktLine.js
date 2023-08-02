@@ -75,14 +75,26 @@ export class GitPktLine {
 
   static streamReader(stream) {
     const reader = new StreamReader(stream)
+    // after receiving raw data, switch to raw chunk output
+    let havePtkLines = true
     return async function read() {
       try {
-        let length = await reader.read(4)
-        if (length == null) return true
-        length = parseInt(length.toString('utf8'), 16)
-        if (length === 0) return null
-        if (length === 1) return null // delim packets
-        const buffer = await reader.read(length - 4)
+        let buffer
+        if (havePtkLines) {
+          let length = await reader.read(4)
+          if (length == null || length.length === 0) return true
+          if (length.length !== 4)
+            throw new RangeError('Unexpected end of stream')
+          length = parseInt(length.toString('utf8'), 16)
+          if (length === 0) return null
+          if (length === 1) return null // delim packets
+          if (Number.isNaN(length)) {
+            // received raw binary data (probably packfile)
+            havePtkLines = false
+            await reader.undo()
+            buffer = await reader.chunk()
+          } else buffer = await reader.read(length - 4)
+        } else buffer = await reader.chunk()
         if (buffer == null) return true
         return buffer
       } catch (err) {

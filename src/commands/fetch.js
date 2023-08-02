@@ -167,7 +167,7 @@ export async function _fetch({
     [
       'multi_ack_detailed',
       'no-done',
-      'side-band-64k',
+      // 'side-band-64k',
       // Note: I removed 'thin-pack' option since our code doesn't "fatten" packfiles,
       // which is necessary for compatibility with git. It was the cause of mysterious
       // 'fatal: pack has [x] unresolved deltas' errors that plagued us for some time.
@@ -224,7 +224,20 @@ export async function _fetch({
     body: [packbuffer],
     headers,
   })
-  const response = await parseUploadPackResponse(raw.body)
+
+  /* let bodyBuffer = new Uint8Array()
+  console.dir(raw, { depth: null })
+  let part
+  while ((part = await raw.body.next()) && part.done !== true) {
+    bodyBuffer = new Uint8Array([...bodyBuffer, ...part.value])
+  }
+
+  await fs.write('./response.bin', bodyBuffer)
+  process.exit() */
+
+  const isSideBand =
+    capabilities.includes('side-band') || capabilities.includes('side-band-64k')
+  const response = await parseUploadPackResponse(raw.body, { isSideBand })
   if (raw.headers) {
     response.headers = raw.headers
   }

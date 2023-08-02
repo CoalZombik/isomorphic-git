@@ -1,7 +1,7 @@
 // @ts-check
 import '../typedefs.js'
 
-import { MultipleGitError } from '../errors/MultipleGitError'
+import { MultipleGitError } from '../errors/MultipleGitError.js'
 import { NotFoundError } from '../errors/NotFoundError.js'
 import { GitIgnoreManager } from '../managers/GitIgnoreManager.js'
 import { GitIndexManager } from '../managers/GitIndexManager.js'

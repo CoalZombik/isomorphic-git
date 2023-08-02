@@ -17,6 +17,7 @@
         "sibling"
       ],
       "newlines-between": "always"
-    }]
+    }],
+    "import/extensions": ["error", "ignorePackages"]
   }
 }

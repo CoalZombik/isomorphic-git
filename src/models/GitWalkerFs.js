@@ -1,6 +1,6 @@
 import { GitIndexManager } from '../managers/GitIndexManager.js'
 import { compareStats } from '../utils/compareStats.js'
-import { join } from '../utils/join'
+import { join } from '../utils/join.js'
 import { normalizeStats } from '../utils/normalizeStats.js'
 import { shasum } from '../utils/shasum.js'
 
